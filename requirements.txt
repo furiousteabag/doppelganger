@@ -1,0 +1,5 @@
+pandas
+loguru
+telethon
+tqdm
+deepl
