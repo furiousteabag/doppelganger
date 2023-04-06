@@ -184,7 +184,11 @@ def train(
             # run_name=wandb_run_name if use_wandb else None,
         ),
     )
+
+    model = torch.compile(model)
     trainer.train()
+
+    model.save_pretrained(output_dir)
 
 
 if __name__ == "__main__":
