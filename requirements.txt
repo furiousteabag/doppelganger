@@ -3,3 +3,9 @@ loguru
 telethon
 tqdm
 deepl
+git+https://github.com/huggingface/transformers
+torch
+accelerate
+sentencepiece
+fire
+wandb
