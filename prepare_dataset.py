@@ -236,7 +236,7 @@ def prepare_dataset(
         for idx, row in session_df.iterrows():
             if message_history and row['from_id'] == target_id:
                 dataset.append(
-                    dict(context=message_history + f"{row['from']}: ", answer=row['text'])
+                    dict(context=message_history + f"{row['from']}:", answer=row['text'])
                 )
             message_history += f"{row['from']}: {row['text']}{concat_messages_delimeter}"
 
