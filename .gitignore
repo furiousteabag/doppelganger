@@ -4,3 +4,5 @@ __pycache__
 .vim-arsync
 *.log
 result.json
+weights/
+wandb/
