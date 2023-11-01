@@ -1,10 +1,12 @@
-LINE_WIDTH=99
+LINE_WIDTH=120
 ISORT_FLAGS=--line-width=${LINE_WIDTH} --profile black
-BLACK_FLAGS=--skip-string-normalization --line-length=${LINE_WIDTH}
-PYTEST_FLAGS=-p no:warnings
+BLACK_FLAGS=--line-length=${LINE_WIDTH}
 
 install:
 	pip install -r requirements.txt
+
+install-format:
+	pip install black isort
 
 format:
 	isort ${ISORT_FLAGS} --check-only --diff .
