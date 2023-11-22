@@ -9,7 +9,7 @@ First, we have to get the data. Open Telegram, go to 'Setting' -> 'Advanced' -> 
 Use `prepare_dataset.py` to transform `result.json` to JSON with a list of sessions:
 
 ```bash
-python prepare_dataset.py "./data/result.json" "./data/messages_kek.json"
+python prepare_dataset.py "./data/result.json" "./data/messages.json"
 ```
 
 There are some flags available for this script, you can read more in `--help`:
