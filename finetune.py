@@ -60,9 +60,7 @@ def preprocess(
 ) -> Dict:
     """Preprocess the data by tokenizing."""
     examples = [s + t for s, t in zip(sources, targets)]
-    examples_tokenized, sources_tokenized = [
-        _tokenize_fn(strings, tokenizer) for strings in (examples, sources)
-    ]
+    examples_tokenized, sources_tokenized = [_tokenize_fn(strings, tokenizer) for strings in (examples, sources)]
     input_ids = examples_tokenized["input_ids"]
     labels = copy.deepcopy(input_ids)
     for label, source_len in zip(labels, sources_tokenized["input_ids_lens"]):
@@ -73,9 +71,7 @@ def preprocess(
 class SupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""
 
-    def __init__(
-        self, list_data_dict: List[Dict[str, str]], tokenizer: transformers.PreTrainedTokenizer
-    ):
+    def __init__(self, list_data_dict: List[Dict[str, str]], tokenizer: transformers.PreTrainedTokenizer):
         super(SupervisedDataset, self).__init__()
 
         logger.warning("Formatting inputs...")
@@ -105,15 +101,11 @@ class DataCollatorForSupervisedDataset:
     tokenizer: transformers.PreTrainedTokenizer
 
     def __call__(self, instances: Sequence[Dict]) -> Dict[str, torch.Tensor]:
-        input_ids, labels = tuple(
-            [instance[key] for instance in instances] for key in ("input_ids", "labels")
-        )
+        input_ids, labels = tuple([instance[key] for instance in instances] for key in ("input_ids", "labels"))
         input_ids = torch.nn.utils.rnn.pad_sequence(
             input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id
         )
-        labels = torch.nn.utils.rnn.pad_sequence(
-            labels, batch_first=True, padding_value=IGNORE_INDEX
-        )
+        labels = torch.nn.utils.rnn.pad_sequence(labels, batch_first=True, padding_value=IGNORE_INDEX)
         return dict(
             input_ids=input_ids,
             labels=labels,
@@ -136,16 +128,12 @@ def train(
     wandb_project: str = "doppelganger",
 ):
     gradient_accumulation_steps = batch_size // micro_batch_size
-    use_wandb = len(wandb_project) > 0 or (
-        "WANDB_PROJECT" in os.environ and len(os.environ["WANDB_PROJECT"]) > 0
-    )
+    use_wandb = len(wandb_project) > 0 or ("WANDB_PROJECT" in os.environ and len(os.environ["WANDB_PROJECT"]) > 0)
 
     tokenizer = LlamaTokenizer.from_pretrained(model_name_or_path)
     tokenizer.pad_token_id = tokenizer.unk_token_id
 
-    model = LlamaForCausalLM.from_pretrained(
-        model_name_or_path, torch_dtype=torch.float16, device_map="auto"
-    )
+    model = LlamaForCausalLM.from_pretrained(model_name_or_path, torch_dtype=torch.float16, device_map="auto")
     logger.info(f"Loaded {model_name_or_path}")
 
     train_val = get_train_val_split(data_path=data_path, val_size=val_size)
