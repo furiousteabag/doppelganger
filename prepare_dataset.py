@@ -58,7 +58,7 @@ def transform_chats(
     input: str,
     output: str,
     target_name: str | None = None,
-    last_x_months: int = 24,
+    last_x_months: int = 60,
     session_minutes_threshold: int = 10,
     concat_one_user_messages_delimeter: str = "\n>>> ",
 ):
