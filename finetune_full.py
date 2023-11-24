@@ -44,7 +44,7 @@ def train(
     data_path: str = "./data/messages.json",
     output_dir: str = "./weights/full/",
     batch_size: int = 16,
-    micro_batch_size: int = 4,
+    micro_batch_size: int = 2,
     num_epochs: int = 3,
     learning_rate: float = 2e-5,
     lr_scheduler_type: str = "cosine",
