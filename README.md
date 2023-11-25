@@ -144,3 +144,35 @@ If you are interested, Telegram have several types of messages which should be h
 ```
 
 </details>
+
+## Training
+
+Final version of models were trained with the parameters which are default in training scripts.
+
+### LoRA fine-tune
+
+To launch LoRA fine-tune with my default params, you will need GPU with 20GB VRAM. RTX 3090 is a good option for it's money. You may reduce `micro_batch_size` or `max_seq_length` if you want to lower the amount of VRAM required. To get full list of parameters, run:
+
+```
+python finetune_lora.py --help
+```
+
+To train LoRA, run:
+
+```
+python finetune_lora.py
+```
+
+### Full fine-tune
+
+To list available params with their default values, run:
+
+```
+python finetune_full.py --help
+```
+
+To train:
+
+```
+torchrun --nnodes=1 --nproc_per_node=NUMBER_OF_GPUS finetune_full.py
+```
