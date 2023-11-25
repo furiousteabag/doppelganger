@@ -1,14 +1,14 @@
 import os
-import torch
 from typing import Dict, List
 
 import fire
+import torch
 import wandb
 from datasets import Dataset
 from loguru import logger
+from tokenizers import AddedToken
 from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel, PreTrainedTokenizer, TrainingArguments
 from trl import SFTTrainer
-from tokenizers import AddedToken
 
 from utils.finetune_utils import DataCollatorForLanguageModelingChatML, prepare_dataset, print_trainable_parameters
 
@@ -43,7 +43,7 @@ def train(
     model_name_or_path: str = "mistralai/Mistral-7B-v0.1",
     data_path: str = "./data/messages.json",
     output_dir: str = "./weights/full/",
-    batch_size: int = 16,
+    gradient_accumulation_steps: int = 4,
     micro_batch_size: int = 2,
     num_epochs: int = 3,
     learning_rate: float = 2e-5,
@@ -52,14 +52,17 @@ def train(
     weight_decay: float = 0.0,
     max_seq_length: int = 1024,
     fsdp: str = "full_shard auto_wrap",
+    fsdp_transformer_layer_cls_to_wrap: str = "MistralDecoderLayer",
     wandb_project: str = "doppelganger",
     logging_steps: int = 1,
 ):
-    gradient_accumulation_steps = batch_size // micro_batch_size
+    if int(os.environ.get("LOCAL_RANK", 0)) == 0:
+        batch_size = micro_batch_size * gradient_accumulation_steps * int(os.environ.get("WORLD_SIZE", 1))
+        logger.info(f"Total batch size: {batch_size}")
 
     model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(model_name_or_path, torch_dtype=torch.bfloat16)
     model.config.use_cache = False
-        
+
     print_trainable_parameters(model)
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -106,6 +109,7 @@ def train(
         group_by_length=True,
         lr_scheduler_type=lr_scheduler_type,
         fsdp=fsdp,
+        fsdp_transformer_layer_cls_to_wrap=fsdp_transformer_layer_cls_to_wrap,
         report_to=["wandb"] if int(os.environ.get("LOCAL_RANK", 0)) == 0 else [],
     )
 
