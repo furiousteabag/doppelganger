@@ -1,6 +1,6 @@
 # Doppelganger
 
-Fine-tuning LLM on your Telegram chats.
+Fine-tuning LLM on my Telegram chats. Full story can be read [in my blog](https://asmirnov.xyz/doppelganger).
 
 ## Dataset Preparation
 
@@ -147,7 +147,7 @@ If you are interested, Telegram have several types of messages which should be h
 
 ## Training
 
-Final version of models were trained with the parameters which are default in training scripts.
+Final version of models were trained with the parameters which are default in training scripts. Training logs can be accessed on [WandB](https://wandb.ai/furiousteabag/doppelganger).
 
 ### LoRA fine-tune
 
@@ -176,3 +176,7 @@ To train:
 ```
 torchrun --nnodes=1 --nproc_per_node=NUMBER_OF_GPUS finetune_full.py
 ```
+
+## Launching
+
+Use [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui). If you used LoRA, then clone [ehartford/dolphin-2.2.1-mistral-7b](https://huggingface.co/ehartford/dolphin-2.2.1-mistral-7b) or whatever model you are used as a base model and put trained LoRA connectors to `./loras/` folder within text-generation-webui. If you did full fine-tune, then copy training result to `./models/`.
