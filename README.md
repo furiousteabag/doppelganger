@@ -1,6 +1,6 @@
 # Doppelganger
 
-Fine-tuning LLM on my Telegram chats. Full story can be read [in my blog](https://asmirnov.xyz/doppelganger).
+Fine-tuning LLM on my Telegram chats. You may read full story [in my blog](https://asmirnov.xyz/doppelganger).
 
 ## Dataset Preparation
 
